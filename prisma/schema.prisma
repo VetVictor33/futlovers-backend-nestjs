@@ -9,3 +9,29 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Team {
+  id            String    @id @db.Uuid @default(uuid())
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now()) @updatedAt
+
+  name          String    @db.VarChar()
+  age           Int
+
+  players       Player[]
+
+  @@map("teams")
+}
+
+model Player {
+  id            String    @id @db.Uuid @default(uuid())
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now()) @updatedAt
+
+  name          String    @db.VarChar()
+
+  team_id       String    @db.Uuid
+  team          Team      @relation(fields: [team_id], references: [id])
+
+  @@map("players")
+}
