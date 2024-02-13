@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Team } from '@prisma/client';
+
 import { TeamService } from './team.service';
-import { Prisma, Team } from '@prisma/client';
 
 @Controller('teams')
 export class TeamController {
@@ -9,7 +10,7 @@ export class TeamController {
     ){}
 
     @Post()
-    async postTeam(@Body() data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
+    async postTeam(@Body() data: Team): Promise<Team> {
         return await this.teamService.create(data)
     }
 
@@ -24,7 +25,7 @@ export class TeamController {
     }
 
     @Put(':id')
-    async putTeam(@Param('id') id:string, @Body() data: Prisma.TeamUncheckedCreateInput): Promise<Team | null> {
+    async putTeam(@Param('id') id:string, @Body() data: Partial<Team>): Promise<Team | null> {
         return await this.teamService.update(id, data)
     }
 

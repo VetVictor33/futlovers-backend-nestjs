@@ -1,43 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Team } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { TeamRepository } from './team.repository';
 
 @Injectable()
 export class TeamService {
     constructor(
-        private prisma: PrismaService
+        private teamRepository: TeamRepository
     ){}
 
     async create(data: Prisma.TeamUncheckedCreateInput): Promise<Team> {
-        const team = await this.prisma.team.create({data: {
+        const team = await this.teamRepository.create({
             name: data.name, 
-        }})
+        })
         return team
     }
 
     async findAll(): Promise<Team[]> {
-        const teams = await this.prisma.team.findMany()
+        const teams = await this.teamRepository.findAll()
         return teams
     }
 
     async findById(id: string): Promise<Team | null> {
-        const team = await this.prisma.team.findUnique({where: {id}})
+        const team = await this.teamRepository.findById(id)
         return team
     }
 
-    async update(id: string, data: Prisma.TeamUncheckedUpdateInput): Promise<Team | null> {
+    async update(id: string, data: Partial<Team>): Promise<Team | null> {
         const team = await this.findById(id)
-        if (!team) {
+        if (!team || ! data.name) {
             return null
         }
-        const updatedTeam = await this.prisma.team.update({where: {id}, data: {
-            name: data.name
-        }})
+        const updatedTeam = await this.teamRepository.update(id, {name: data.name})
 
         return updatedTeam
     }
 
     async delete(id: string): Promise<void> {
-        await this.prisma.team.delete({where: {id}})
+        await this.teamRepository.delete(id)
     }
 }
