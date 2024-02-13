@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { Team } from '@prisma/client';
 
 import { TeamService } from './team.service';
@@ -11,7 +11,11 @@ export class TeamController {
 
     @Post()
     async postTeam(@Body() data: Team): Promise<Team> {
-        return await this.teamService.create(data)
+        try {
+            return await this.teamService.create({name:data.name})
+        } catch (error) {
+            throw new HttpException('Erro ao criar o time, por favor forneça o "name"', HttpStatus.BAD_REQUEST)
+        }
     }
 
     @Get()
@@ -21,16 +25,28 @@ export class TeamController {
 
     @Get(':id')
     async getTeam(@Param('id') id:string): Promise<Team | null> {
-        return await this.teamService.findById(id)
+        try {
+            return await this.teamService.findById(id)
+        } catch (error) {
+            throw new HttpException(`Erro ao buscar por id`, HttpStatus.BAD_REQUEST)
+        }
     }
 
     @Put(':id')
     async putTeam(@Param('id') id:string, @Body() data: Partial<Team>): Promise<Team | null> {
-        return await this.teamService.update(id, data)
+        try {
+            return await this.teamService.update(id, data)
+        } catch (error) {
+            throw new HttpException(`Erro ao atualizar o time, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
+        }
     }
 
     @Delete(':id')
     async deleteTeam(@Param('id') id:string): Promise<void> {
-        await this.teamService.delete(id)
+        try {
+            await this.teamService.delete(id)
+        } catch (error) {
+            throw new HttpException(`Erro ao deletar o time, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
+        }
     }
 }
