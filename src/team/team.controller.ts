@@ -12,7 +12,7 @@ export class TeamController {
     @Post()
     async postTeam(@Body() data: Team): Promise<Team> {
         try {
-            return await this.teamService.create({name:data.name})
+            return await this.teamService.create(data)
         } catch (error) {
             throw new HttpException('Erro ao criar o time, por favor forneça o "name"', HttpStatus.BAD_REQUEST)
         }

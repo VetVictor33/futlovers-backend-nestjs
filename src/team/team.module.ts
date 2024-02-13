@@ -11,5 +11,4 @@ import { TeamService } from './team.service';
 })
 export class TeamModule implements Prisma.TeamCreateInput {
     name: string
-    age: number
 }
