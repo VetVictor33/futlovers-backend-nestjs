@@ -16,7 +16,6 @@ model Team {
   updated_at    DateTime  @default(now()) @updatedAt
 
   name          String    @db.VarChar()
-  age           Int
 
   players       Player[]
 
@@ -29,6 +28,7 @@ model Player {
   updated_at    DateTime  @default(now()) @updatedAt
 
   name          String    @db.VarChar()
+  age           Int
 
   team_id       String    @db.Uuid
   team          Team      @relation(fields: [team_id], references: [id])
