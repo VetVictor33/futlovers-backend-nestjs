@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma, Team } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
-import { BaseInterfaceRepository } from "src/repository/base.interface.repository";
+import { BaseRepository } from "src/repository/base.interface.repository";
 
 @Injectable()
-export class TeamRepository implements BaseInterfaceRepository<Team> {
+export class TeamRepository implements BaseRepository<Team> {
     constructor(
         private prisma: PrismaService
     ){}

@@ -26,12 +26,7 @@ export class TeamService {
     }
 
     async update(id: string, data: Partial<Team>): Promise<Team | null> {
-        const team = await this.findById(id)
-        if (!team || ! data.name) {
-            return null
-        }
         const updatedTeam = await this.teamRepository.update(id, {name: data.name})
-
         return updatedTeam
     }
 
