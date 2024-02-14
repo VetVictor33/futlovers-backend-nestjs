@@ -9,7 +9,7 @@ export class PlayerRepository implements BaseRepository<Player> {
         private prisma: PrismaService
     ){}
 
-    async create(data: Partial<Player>): Promise<Player>{
+    async create(data: Prisma.PlayerUncheckedCreateInput): Promise<Player>{
         const player = await this.prisma.player.create({data: {
             name: data.name,
             age: data.age,

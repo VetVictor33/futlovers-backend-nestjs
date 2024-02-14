@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PlayerRepository } from '../repositories/player.repository';
-import { Player, Prisma } from '@prisma/client';
+import { Player } from '@prisma/client';
 
 @Injectable()
 export class PlayerService {
@@ -8,7 +8,7 @@ export class PlayerService {
         private playerRepository: PlayerRepository
     ){}
 
-    async create(team_id: string, data: Prisma.PlayerUncheckedCreateInput): Promise<Player> {
+    async create(team_id: string, data: Partial<Player>): Promise<Player> {
         const player = await this.playerRepository.create({
             name: data.name,
             age: data.age,
