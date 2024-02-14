@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TeamController } from './team.controller';
-import { TeamRepository } from "./team.repository";
+import { TeamRepository } from "../repositories/team.repository";
 import { TeamService } from './team.service';
 
 @Module({
