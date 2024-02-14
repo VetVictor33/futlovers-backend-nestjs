@@ -19,7 +19,9 @@ export class PlayerRepository implements BaseRepository<Player> {
     }
 
     async findAll(): Promise<Player[]> {
-        const players = await this.prisma.player.findMany()
+        const players = await this.prisma.player.findMany({
+            include: {team: true}
+        })
         return players
     }
 
