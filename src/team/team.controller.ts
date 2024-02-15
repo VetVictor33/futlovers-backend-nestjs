@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Team } from '@prisma/client';
 
+import { CreateUpdateTeamDto, FindOneParams } from './team-dto';
 import { TeamService } from './team.service';
 
 @Controller('teams')
@@ -10,12 +11,8 @@ export class TeamController {
     ){}
 
     @Post()
-    async postTeam(@Body() data: Team): Promise<Team> {
-        try {
-            return await this.teamService.create(data)
-        } catch (error) {
-            throw new HttpException('Erro ao criar o time, por favor forneça o "name"', HttpStatus.BAD_REQUEST)
-        }
+    async postTeam(@Body() data: CreateUpdateTeamDto): Promise<Team> {
+        return await this.teamService.create(data)
     }
 
     @Get()
@@ -24,29 +21,17 @@ export class TeamController {
     }
 
     @Get(':id')
-    async getTeam(@Param('id') id:string): Promise<Team | null> {
-        try {
-            return await this.teamService.findById(id)
-        } catch (error) {
-            throw new HttpException(`Erro ao buscar por id`, HttpStatus.BAD_REQUEST)
-        }
+    async getTeam(@Param() params: FindOneParams): Promise<Team | null> {
+        return await this.teamService.findById(params.id)
     }
 
     @Put(':id')
-    async putTeam(@Param('id') id:string, @Body() data: Partial<Team>): Promise<Team | null> {
-        try {
-            return await this.teamService.update(id, data)
-        } catch (error) {
-            throw new HttpException(`Erro ao atualizar o time, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
-        }
+    async putTeam(@Param() params: FindOneParams, @Body() data: CreateUpdateTeamDto): Promise<Team | null> {
+       return await this.teamService.update(params.id, data)
     }
 
     @Delete(':id')
-    async deleteTeam(@Param('id') id:string): Promise<void> {
-        try {
-            await this.teamService.delete(id)
-        } catch (error) {
-            throw new HttpException(`Erro ao deletar o time, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
-        }
+    async deleteTeam(@Param() params: FindOneParams): Promise<void> {
+        await this.teamService.delete(params.id)
     }
 }
