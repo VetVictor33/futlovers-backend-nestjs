@@ -6,7 +6,7 @@ import { AppModule } from "./../src/app.module";
 import { PrismaService } from "./../src/prisma/prisma.service";
 
 import { PrismaServiceMock } from "./mocks/prisma-mock";
-import { teamsList } from "./mocks/teams-mocks";
+import { singleTeam, teamsList } from "./mocks/teams-mocks";
 
 describe('TeamController (e2e)', () => {
   let app: INestApplication;
@@ -25,12 +25,42 @@ describe('TeamController (e2e)', () => {
     await app.close();
   }); 
 
+  it('/teams (POST)', async () => {
+    const response = await request(app.getHttpServer())
+    .post(`/teams`).send({name: singleTeam.name})
+    
+    expect(response.statusCode).toEqual(201)
+    expect(response.body).toStrictEqual(singleTeam)
+  });
+
   it('/teams (GET)', async () => {
     const response = await request(app.getHttpServer())
-      .get('/teams')
+    .get('/teams')
     
     expect(response.statusCode).toEqual(200)
     expect(response.body).toStrictEqual(teamsList)
-  
   });
+
+  it('/teams/:id (GET)', async () => {
+    const response = await request(app.getHttpServer())
+    .get(`/teams/${singleTeam.id}`)
+    
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toStrictEqual(singleTeam)
+  })
+  
+  it('/teams/:id (PUT)', async () => {
+    const response = await request(app.getHttpServer())
+    .put(`/teams/${singleTeam.id}`).send({name: singleTeam.name})
+    
+    expect(response.statusCode).toEqual(200)
+    expect(response.body).toStrictEqual(singleTeam)
+  })
+
+  it('/teams/:id (DELETE)', async () => {
+    const response = await request(app.getHttpServer())
+    .delete(`/teams/${singleTeam.id}`)
+
+    expect(response.statusCode).toEqual(200)
+  })
 })
