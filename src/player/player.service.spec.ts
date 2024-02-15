@@ -4,26 +4,37 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PlayerRepository } from '../repositories/player.repository';
 import { Player } from '@prisma/client';
 
+interface PrismaServiceMock {
+  player: {
+    create: jest.MockedFn<any>;
+    findMany: jest.MockedFn<any>;
+    findUnique: jest.MockedFn<any>;
+    update: jest.MockedFn<any>;
+    delete: jest.MockedFn<any>;
+  };
+}
+
+const prismaMock = {
+    player: {
+        create: jest.fn(),
+        findMany: jest.fn(),
+        findUnique: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
+    }
+};
+
 describe('PlayerService', () => {
   let service: PlayerService;
-  let prismaService
+  let prismaService: PrismaServiceMock
 
   beforeEach(async () => {
-    prismaService = {
-        player: {
-            create: jest.fn(),
-            findMany: jest.fn(),
-            findUnique: jest.fn(),
-            update: jest.fn(),
-            delete: jest.fn(),
-        }
-    };
-
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PlayerService, PlayerRepository ,PrismaService, {provide: PrismaService, useValue: prismaService}],
+      providers: [PlayerService, PlayerRepository, {provide: PrismaService, useValue: prismaMock}],
     }).compile();
 
     service = module.get<PlayerService>(PlayerService);
+    prismaService = module.get<PrismaService>(PrismaService) as unknown as PrismaServiceMock;
   });
 
   it('should be defined', () => {
