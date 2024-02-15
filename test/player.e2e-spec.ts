@@ -49,7 +49,6 @@ describe('PlayerController (e2e)', () => {
       expect(response.body).toStrictEqual(singlePlayer)
   })
   
-  
   it('/players/:id (PUT)', async () => {
     const response = await request(app.getHttpServer())
     .put(`/players/${singlePlayer.id}`).send({name: singlePlayer.name, age: singlePlayer.age, team_id: singlePlayer.team_id})
