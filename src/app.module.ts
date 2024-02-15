@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlayerModule } from './player/player.module';
-import { TeamModule } from './team/team.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { TeamModule } from './team/team.module';
 
 @Module({
   imports: [TeamModule, PlayerModule, PrismaModule],
