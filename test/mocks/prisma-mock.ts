@@ -30,7 +30,7 @@ export const PrismaServiceMock: IPrismaServiceMock = {
         create: jest.fn().mockResolvedValue(singleTeam),
         findMany: jest.fn().mockResolvedValue(teamsList),
         findUnique: jest.fn().mockResolvedValue(singleTeam),
-        update: jest.fn().mockResolvedValue(teamsList),
+        update: jest.fn().mockResolvedValue(singleTeam),
         delete: jest.fn(),
     }
 };
