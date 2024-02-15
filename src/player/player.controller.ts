@@ -1,6 +1,9 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
-import { PlayerService } from './player.service';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+
 import { Player } from '@prisma/client';
+
+import { CreatePlayerDto, FindOneParams, UpdatePlayerDto } from './player-dto';
+import { PlayerService } from './player.service';
 
 @Controller('players')
 export class PlayerController {
@@ -9,13 +12,8 @@ export class PlayerController {
     ){}
 
     @Post(':id')
-    async postPlayer(@Param('id') id:string, @Body() data: Player): Promise<Player>{
-        try {
-            return await this.playerService.create(id, data)
-        } catch (error) {
-            const message = 'Erro ao criar jogador. Certifique-se de fornecer os campos "name", "age" e que o id do time é válido'
-            throw new HttpException(message, HttpStatus.BAD_REQUEST)
-        }
+    async postPlayer(@Param() params: FindOneParams, @Body() data: CreatePlayerDto): Promise<Player>{
+        return await this.playerService.create(params.id, data)
     }
 
     @Get()
@@ -24,30 +22,17 @@ export class PlayerController {
     }
 
     @Get(':id')
-    async getPlayer(@Param('id') id:string): Promise<Player | null> {
-        try {
-            return await this.playerService.findById(id)
-        } catch (error) {
-            throw new HttpException(`Erro ao buscar por id`, HttpStatus.BAD_REQUEST)
-        }
+    async getPlayer(@Param() params: FindOneParams): Promise<Player | null> {
+        return await this.playerService.findById(params.id)
     }
 
     @Put(':id')
-    async putTeam(@Param('id') id:string, @Body() data: Partial<Player>): Promise<Player | null> {
-        try {
-            return await this.playerService.update(id, data)
-        } catch (error) {
-            console.log(error)
-            throw new HttpException(`Erro ao atualizar o jogador, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
-        }
+    async putTeam(@Param() params: FindOneParams, @Body() data: UpdatePlayerDto): Promise<Player | null> {
+        return await this.playerService.update(params.id, data)
     }
 
     @Delete(':id')
-    async deleteTeam(@Param('id') id:string): Promise<void> {
-        try {
-            await this.playerService.delete(id)
-        } catch (error) {
-            throw new HttpException(`Erro ao deletar o jogador, certifique-se de id é válido`, HttpStatus.BAD_REQUEST)
-        }
+    async deleteTeam(@Param() params: FindOneParams): Promise<void> {
+        await this.playerService.delete(params.id)
     }
 }
